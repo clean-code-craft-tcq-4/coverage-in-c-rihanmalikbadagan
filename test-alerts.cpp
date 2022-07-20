@@ -22,21 +22,21 @@ TEST_CASE("Classify temperature breach") {
 TEST_CASE("Check and Alert") {
   BatteryCharacter batteryCharacter;
   batteryCharacter.coolingType = PASSIVE_COOLING;
-  REQUIRE(checkAndAlert(TO_CONTROLLER, batteryCharacter, 22) == 0);
-  REQUIRE(checkAndAlert(TO_EMAIL, batteryCharacter, 40) == 0);
+  REQUIRE(checkAndAlert(TO_CONTROLLER, batteryCharacter, 22) == IS_OK);
+  REQUIRE(checkAndAlert(TO_EMAIL, batteryCharacter, 40) == IS_OK);
   batteryCharacter.coolingType = HI_ACTIVE_COOLING;  
-  REQUIRE(checkAndAlert(TO_CONTROLLER, batteryCharacter, -5) == 0);
-  REQUIRE(checkAndAlert(TO_CONTROLLER, batteryCharacter, 55) == 0);
+  REQUIRE(checkAndAlert(TO_CONTROLLER, batteryCharacter, -5) == IS_OK);
+  REQUIRE(checkAndAlert(TO_CONTROLLER, batteryCharacter, 55) == IS_OK);
   batteryCharacter.coolingType = MED_ACTIVE_COOLING;
-  REQUIRE(checkAndAlert(UNKNOWN_TARGET, batteryCharacter, -10) == -1);
-  REQUIRE(checkAndAlert(TO_EMAIL, batteryCharacter, 38) == 0);
+  REQUIRE(checkAndAlert(UNKNOWN_TARGET, batteryCharacter, -10) == NOT_OK);
+  REQUIRE(checkAndAlert(TO_EMAIL, batteryCharacter, 38) == IS_OK);
 }
 
 TEST_CASE("Send alert") {
-  REQUIRE(sendAlert(TO_CONTROLLER, NORMAL) == 0);
-  REQUIRE(sendAlert(TO_CONTROLLER, TOO_HIGH) == 0);
-  REQUIRE(sendAlert(TO_CONTROLLER, TOO_LOW) == 0);
-  REQUIRE(sendAlert(TO_EMAIL, NORMAL) == 0);
-  REQUIRE(sendAlert(UNKNOWN_TARGET, TOO_HIGH) == -1);
-  REQUIRE(sendAlert(TO_EMAIL, TOO_LOW) == 0);
+  REQUIRE(sendAlert(TO_CONTROLLER, NORMAL) == IS_OK);
+  REQUIRE(sendAlert(TO_CONTROLLER, TOO_HIGH) == IS_OK);
+  REQUIRE(sendAlert(TO_CONTROLLER, TOO_LOW) == IS_OK);
+  REQUIRE(sendAlert(TO_EMAIL, NORMAL) == IS_OK);
+  REQUIRE(sendAlert(UNKNOWN_TARGET, TOO_HIGH) == NOT_OK);
+  REQUIRE(sendAlert(TO_EMAIL, TOO_LOW) == IS_OK);
 }

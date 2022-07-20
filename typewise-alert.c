@@ -1,6 +1,10 @@
 #include "typewise-alert.h"
 #include <stdio.h>
 
+TemperatureLimits tempLimitArray[3] = {{PASSIVE_COOLING_LOW_LIMIT, PASSIVE_COOLING_HIGH_LIMIT}
+                                          , {HI_ACTIVE_COOLING_LOW_LIMIT, HI_ACTIVE_COOLING_HIGH_LIMIT}
+                                            , {MED_ACTIVE_COOLING_LOW_LIMIT,MED_ACTIVE_COOLING_HIGH_LIMIT}};
+
 BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
   if(value < lowerLimit) {
     return TOO_LOW;
@@ -31,17 +35,17 @@ int sendAlert (AlertTarget alertTarget, BreachType breachType)
   if (alertTarget == TO_CONTROLLER)
   {
     sendToController(breachType);
-    return 0;
+    return IS_OK;
   }
 
   if (alertTarget == TO_EMAIL)
   {
     sendToController(breachType);
-    return 0;
+    return IS_OK;
   }
   
   printf("[Warning] Unknown alert target\n");
-  return -1;
+  return NOT_OK;
 }
 
 void sendToController(BreachType breachType) {
