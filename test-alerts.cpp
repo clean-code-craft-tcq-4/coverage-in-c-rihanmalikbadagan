@@ -20,12 +20,16 @@ TEST_CASE("Classify temperature breach") {
 }
 
 TEST_CASE("Check and Alert") {
-  REQUIRE(checkAndAlert(TO_CONTROLLER, PASSIVE_COOLING, 22) == 0);
-  REQUIRE(checkAndAlert(TO_CONTROLLER, HI_ACTIVE_COOLING, -5) == 0);
-  REQUIRE(checkAndAlert(TO_CONTROLLER, MED_ACTIVE_COOLING, 55) == 0);
-  REQUIRE(checkAndAlert(TO_EMAIL, PASSIVE_COOLING, 40) == 0);
-  REQUIRE(checkAndAlert(UNKNOWN_TARGET, HI_ACTIVE_COOLING, -10) == -1);
-  REQUIRE(checkAndAlert(TO_EMAIL, MED_ACTIVE_COOLING, 38) == 0);
+  BatteryCharacter batteryCharacter;
+  batteryCharacter.coolingType = PASSIVE_COOLING;
+  REQUIRE(checkAndAlert(TO_CONTROLLER, batteryCharacter, 22) == 0);
+  REQUIRE(checkAndAlert(TO_EMAIL, batteryCharacter, 40) == 0);
+  batteryCharacter.coolingType = HI_ACTIVE_COOLING;  
+  REQUIRE(checkAndAlert(TO_CONTROLLER, batteryCharacter, -5) == 0);
+  REQUIRE(checkAndAlert(TO_CONTROLLER, batteryCharacter, 55) == 0);
+  batteryCharacter.coolingType = MED_ACTIVE_COOLING;
+  REQUIRE(checkAndAlert(UNKNOWN_TARGET, batteryCharacter, -10) == -1);
+  REQUIRE(checkAndAlert(TO_EMAIL, batteryCharacter, 38) == 0);
 }
 
 TEST_CASE("Send alert") {
