@@ -40,7 +40,7 @@ int sendAlert (AlertTarget alertTarget, BreachType breachType)
 
   if (alertTarget == TO_EMAIL)
   {
-    sendToController(breachType);
+    sendToEmail(breachType);
     return IS_OK;
   }
   
